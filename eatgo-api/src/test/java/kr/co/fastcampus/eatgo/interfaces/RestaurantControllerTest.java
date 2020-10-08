@@ -33,4 +33,25 @@ public class RestaurantControllerTest {
 
         //
     }
+
+    @Test
+    public void detail() throws Exception {
+        mvc.perform(get("/restaurants/1004"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"id\":1004") //json 형태 확인
+                ))
+                .andExpect(content().string(
+                        containsString("\"name\":\"Bob zip\"") //json 형태 확인
+                ));
+
+        mvc.perform(get("/restaurants/2020"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"id\":2020") //json 형태 확인
+                ))
+                .andExpect(content().string(
+                        containsString("\"name\":\"Cyber food\"") //json 형태 확인
+                ));
+    }
 }
