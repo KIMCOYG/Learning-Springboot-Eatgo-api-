@@ -1,5 +1,6 @@
 package kr.co.fastcampus.eatgo.interfaces;
 
+import kr.co.fastcampus.eatgo.application.RestaurantService;
 import kr.co.fastcampus.eatgo.domain.MenuItemRepository;
 import kr.co.fastcampus.eatgo.domain.MenuItemRepositoryImpl;
 import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
@@ -23,6 +24,9 @@ public class RestaurantControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @SpyBean(RestaurantService.class) //컨트롤러에 원하는 객체 주입 가능
+    private RestaurantService restaurantService;
 
     @SpyBean(RestaurantRepositoryImpl.class) //컨트롤러에 원하는 객체 주입 가능
     private RestaurantRepository restaurantRepository;
