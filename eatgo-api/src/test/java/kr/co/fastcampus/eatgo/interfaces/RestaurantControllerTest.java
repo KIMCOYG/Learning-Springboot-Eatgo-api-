@@ -1,5 +1,7 @@
 package kr.co.fastcampus.eatgo.interfaces;
 
+import kr.co.fastcampus.eatgo.domain.MenuItemRepository;
+import kr.co.fastcampus.eatgo.domain.MenuItemRepositoryImpl;
 import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
 import kr.co.fastcampus.eatgo.domain.RestaurantRepositoryImpl;
 import org.junit.Test;
@@ -25,6 +27,9 @@ public class RestaurantControllerTest {
     @SpyBean(RestaurantRepositoryImpl.class) //컨트롤러에 원하는 객체 주입 가능
     private RestaurantRepository restaurantRepository;
 
+    @SpyBean(MenuItemRepositoryImpl.class)
+    private MenuItemRepository menuItemRepository;
+
     @Test
     public void list() throws Exception {
         mvc.perform(get("/restaurants"))
@@ -36,7 +41,6 @@ public class RestaurantControllerTest {
                         containsString("\"name\":\"Bob zip\"") //json 형태 확인
                 ));
 
-        //
     }
 
     @Test
@@ -48,6 +52,9 @@ public class RestaurantControllerTest {
                 ))
                 .andExpect(content().string(
                         containsString("\"name\":\"Bob zip\"") //json 형태 확인
+                ))
+                .andExpect(content().string(
+                        containsString("Kimchi")
                 ));
 
         mvc.perform(get("/restaurants/2020"))
