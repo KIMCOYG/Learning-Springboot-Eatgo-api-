@@ -12,11 +12,17 @@ public class Restaurant {
     public Restaurant() {
     }
 
+    public Restaurant(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
+
     public Restaurant(Long id, String name, String address) {
         this.name = name;
         this.address = address;
         this.id = id;
     }
+
 
     public String getName() {
         return this.name;
@@ -28,6 +34,10 @@ public class Restaurant {
 
     public String getAddress() {
         return address;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Long getId() {
@@ -47,4 +57,5 @@ public class Restaurant {
             addMenuItem(menuItem);
         }
     }
+
 }
