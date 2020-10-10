@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RestaurantController.class)
@@ -64,7 +67,7 @@ public class RestaurantControllerTest {
 
         Restaurant restaurant2 = new Restaurant(2020L, "Cyber food", "Seoul");
 
-        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant1);
+        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant1); //정보들을 얻는 것에 대해서 Mock 가짜 객체 넣어주어 확인
         given(restaurantService.getRestaurant(2020L)).willReturn(restaurant2);
 
 
@@ -88,5 +91,17 @@ public class RestaurantControllerTest {
                 .andExpect(content().string(
                         containsString("\"name\":\"Cyber food\"") //json 형태 확인
                 ));
+    }
+
+    @Test
+    public void create() throws Exception {
+        mvc.perform(post("/restaurants")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Busan\", \"address\":\"Busan\"}"))
+                .andExpect(status().isCreated()) //기존에는 isOk()
+                .andExpect(header().string("location", "/restaurants/1234"))
+                .andExpect(content().string("{}"));
+
+        verify(restaurantService).addRestaurant(any()); //리턴이 중심이 아니라 실행이 중심, mockito에서는 무엇을 넣던지 작동하도록 any()
     }
 }
