@@ -6,6 +6,7 @@ import kr.co.fastcampus.eatgo.domain.Restaurant;
 import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,5 +40,15 @@ public class RestaurantService {
 
     public Restaurant addRestaurant(Restaurant restaurant) {
         return restaurantRepository.save(restaurant);
+    }
+
+    @Transactional //변경들이 범위를 벗어날 때 다같이 적용, 객체 처리를 디비에 반영하기 위해서
+    public Restaurant updateRestaurant(Long id, String name, String address) {
+
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null); //Optional로 나와서 orElse(null) 처리
+
+        restaurant.updateInformation(name, address);
+
+        return restaurant;
     }
 }
